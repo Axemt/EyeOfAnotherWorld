@@ -112,3 +112,6 @@ dmypy.json
 
 # Pyre type checker
 .pyre/
+D2_TOKEN
+.atok
+*.npy
