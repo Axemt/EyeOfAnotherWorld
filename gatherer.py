@@ -87,12 +87,19 @@ if toClassify == "":
 else:
     N = min(int(toClassify), len(equippable))
 
-armor = np.zeros( (N,6) )
-tags  = np.zeros( (N,) )
+ARMOR_CONTENTFILE = "items-{}.npy".format(userData['bungieNetUser']['uniqueName'])
+TAGS_CONTENTFILE = "tags-{}.npy".format(userData['bungieNetUser']['uniqueName'])
+
+if os.path.exists(ARMOR_CONTENTFILE) and os.path.exists(TAGS_CONTENTFILE):
+    armor = np.load(ARMOR_CONTENTFILE)
+    tags = np.load(TAGS_CONTENTFILE)
+else:
+    armor = np.zeros( (1,6) )
+    tags  = np.zeros( (1,) )
+
 ct = 0
 print(f"Classifying {N} items...\n")
 for item in equippable.values():
-
     if HASH_INT in item['stats']: #Is an armor piece
         mob  = int(item['stats'][HASH_MOB]['value'])
         res  = int(item['stats'][HASH_RES]['value'])
@@ -100,10 +107,13 @@ for item in equippable.values():
         dis  = int(item['stats'][HASH_DIS]['value'])
         inte = int(item['stats'][HASH_INT]['value'])
         stre = int(item['stats'][HASH_STR]['value'])
-        
-        stat_total = mob + res + rec + dis + inte + stre
 
-        if ct < N and stat_total > 50:
+        stat_total = mob + res + rec + dis + inte + stre
+        armorpiece = np.array([mob, res, rec, dis, inte, stre])
+
+        is_contained = (armor == armorpiece).all(axis=1).any()
+
+        if ct < N and stat_total > 50 and not is_contained:
             print("Armor piece with:")
             print(f"\t{mob} Mobility")
             print(f"\t{res} Resilience")
@@ -113,18 +123,27 @@ for item in equippable.values():
             print(f"\t{stre} Strength\n")
             print(f"Stat total: {stat_total}")
 
-            clas = input("Is it a good armor piece?\n\t[1] Yes\n\t[2] No\n")
-            tags[ct] = clas
-            armor[ct] = np.array([mob, res, rec, dis, inte, stre])
+            clas = int(input("Is it a good armor piece?\n\t[1] Yes\n\t[2] No\n"))
+
+            #add new row           
+            armor = np.vstack( (armor, np.array([mob, res, rec, dis, inte, stre]) ) )
+            tags = np.vstack( (tags, clas) )
+
             if os.name == 'nt':
                 os.system('cls')
             # for mac and linux(here, os.name is 'posix')
             else:
-                os.system('clear')   
+                os.system('clear')
             ct += 1
+
+            if ct == N:
+                break
         else:
             continue
 
+if os.path.exists(ARMOR_CONTENTFILE) and os.path.exists(TAGS_CONTENTFILE):
+    os.remove(ARMOR_CONTENTFILE)
+    os.remove(TAGS_CONTENTFILE)
 
-np.save("items-{}-{}".format(userData['bungieNetUser']['uniqueName'], date.today()), armor)
-np.save("tags-{}-{}".format(userData['bungieNetUser']['uniqueName'], date.today()), tags)
+np.save(ARMOR_CONTENTFILE, armor)
+np.save(TAGS_CONTENTFILE, tags)
