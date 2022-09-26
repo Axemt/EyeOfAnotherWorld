@@ -116,3 +116,5 @@ D2_TOKEN
 .atok
 *.npy
 icon.jpg
+*.content
+*.d2data
