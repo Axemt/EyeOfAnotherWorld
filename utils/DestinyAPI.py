@@ -4,6 +4,7 @@ import webbrowser
 import requests
 import pickle
 from json.decoder import JSONDecodeError
+from requests.exceptions import SSLError
 
 
 DESTINY2_URL = 'https://www.bungie.net/Platform/Destiny2/'
@@ -63,12 +64,30 @@ class DestinyAPI:
             except JSONDecodeError:
                 # The token has expired while processing!
                 # re-log in
-                self.getAuthToken()
+                print('[WARN]: Unknown JSONDecodeError')
+                return {}
+            except SSLError:
+                # ?
+                print('[WARN]: Unknown SSL Error')
+                return {}
 
             while res['ErrorCode'] == 1688:
                 # Timeout, retry once
                 print('[WARN]: {}: {} :: Retrying query'.format(res['ErrorStatus'],res['Message']))
                 res = fn(self, *args, **kwargs)
+
+            while res['ErrorCode'] == 1672:
+                # game server throttle
+                print('[WARN]: {}: Game Server is throttling :: Retrying query'.format(res['ErrorStatus']))
+                time.sleep(30) # wait 30s for the game server to lighten load
+                res = fn(self, *args, **kwargs)
+
+            while res['ErrorCode'] == 5:
+                # Maintenance
+                print('\n[WARN]: {}: Bungie.net is down for maintenance: Waiting 30min\n'.format(res['ErrorStatus']))
+                time.sleep(60 * 30)
+                res = fn(self, *args, **kwargs)
+
 
             if res['ThrottleSeconds'] > 0:
                 print('Received ThrottleSeconds: {}'.format(res['ThrottleSeconds']))

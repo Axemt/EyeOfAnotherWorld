@@ -20,9 +20,9 @@ del D2_TOKEN
 #D2API.getUserData()
 
 
-# 'Topological search'(?) : An activity set is an initial node. From there, get weapon data *and* all players in those activities, get the N most recent activities for that second set of players, repeat
+# Snowball Ego Network search
 # Repeat for as many modes needed, since we might want to exclude some PvP modes such as Mayhem
-searchRadius = 1
+searchRadius = 3
 countExpansion = 1
 date_start = date(2022, 9, 23)
 date_end = datetime.today().date()
@@ -33,12 +33,11 @@ IB_CLASH = 44
 TRIALS = 84
 PVP_COMPETITIVE = 69
 PVP_QUICKPLAY = 70
-modes = [TRIALS]
+modes = [PVP_QUICKPLAY]
 
 mad = 4611686018467559123
 OriginBlock = [(mad, 3)]
 weapons = []
-playerCount = 0
 
 FILE_DUMP_NAME = FILE_DUMP_NAME.format(searchRadius, ''.join([str(i)+'-' for i in modes]), date_start, date_end)
 for mode in modes:
@@ -85,6 +84,7 @@ for mode in modes:
                         activity = activityInfo['activityDetails']['instanceId']
                         if activity not in PGCRclosedList:
                             activityIdQueue.add(activity)
+                            break # Found at least one
         
 
         while len(activityIdQueue) > 0:
@@ -115,6 +115,6 @@ print('Processed {} unique games from {} to {}\nGot {} weapon ocurrences of whic
 
 with open(FILE_DUMP_NAME, 'wb') as f:
     print('Writing result data to "{}"...'.format(FILE_DUMP_NAME))
-    pickle.dump( (dict(Counter(weapons)), playerCount, PGCRclosedList) , f)
+    pickle.dump( (dict(Counter(weapons)), PGCRclosedList) , f)
     print('Dump finished')
 
