@@ -118,7 +118,7 @@ dmypy.json
 D2_TOKEN
 .atok
 *.npy
-icon.jpg
+#icon.jpg
 *.content
 #*.d2data
 #*.csv

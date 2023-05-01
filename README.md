@@ -1,5 +1,6 @@
 <img style="float: left;" src="icon.jpg">
 # Eye Of Another World
+
 The Destiny 2 project that analyzes weapon stats and perks to predict their popularity
 
 by Jorge Jimenez Garcia, as part of a Bsc in Computer Science for Technological University Dublin</a> 
