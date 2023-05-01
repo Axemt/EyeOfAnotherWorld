@@ -1,11 +1,12 @@
+
+## Eye Of Another World
 <img style="float: left;" src="icon.jpg">
-# Eye Of Another World
 
 The Destiny 2 project that analyzes weapon stats and perks to predict their popularity
 
 by Jorge Jimenez Garcia, as part of a Bsc in Computer Science for Technological University Dublin</a> 
 
-## How to run
+### How to run
 
 * Gather data
 	To gather data, execute the ```weaponCrawler.py``` script to generate a ```.d2data``` file. Control the parameters of the search by modifying the 'PARAMETERS' section of the script
@@ -20,6 +21,6 @@ by Jorge Jimenez Garcia, as part of a Bsc in Computer Science for Technological 
 	With a dataset from a different release, run the ```Cross Release``` notebook. Make sure to convert the dataset to the appropriate feature space and encoding with the provided ```retrofit``` and ```preprocess\_and\_encode``` functions
 	
 	
-## Datasets available
+### Datasets available
 
 The repository contains data gathered during 'Season of Plunder', 'Season of the Seraph' and 'Lightfall' respectively. It is present in the ```data``` directory, and available in raw and csv formats. Raw formats are to be processed by the ```Preprocess``` notebook again to account for changes in the game's database definitions.
