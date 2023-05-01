@@ -5,9 +5,40 @@ import json
 import pickle
 from collections import Counter
 
+#---CONSTANTS---
 DATE_FMT = '%Y-%m-%dT%H:%M:%SZ'
 PLATFORM_NAMES = ['', 'Xbox', 'PlayStation', 'Steam', 'BattleNet', 'Stadia', 'Epic']
 FILE_DUMP_NAME = 'RAD{}MODE{}from{}-to{}.d2data'
+
+# Gamemodes
+IB_CONTROL = 43
+IB_CLASH = 44
+TRIALS = 84
+PVP_COMPETITIVE = 69
+PVP_QUICKPLAY = 70
+#----------------
+
+#---PARAMETERS---
+
+# How many iterations of the algorithm will run
+searchRadius = 2
+
+# How many games from each user are logged
+countExpansion = 1
+
+date_start = date(2022, 9, 23)
+date_end = datetime.today().date()
+
+# The gamemodes to query
+modes = [PVP_QUICKPLAY]
+
+
+# (Optional, modify the start of the snowballing search)
+# Players in the open list take the form of tuples where the first component is their Bungie.net ID and the second is their platform
+OriginBlock = [(4611686018467559123, 3)]
+#---------------
+
+
 
 if os.path.exists("D2_TOKEN"):
     with open("D2_TOKEN",'r') as tok:
@@ -17,26 +48,11 @@ else:
 
 D2API = DestinyAPI(D2_TOKEN)
 del D2_TOKEN
-#D2API.getUserData()
+
+
 
 
 # Snowball Ego Network search
-# Repeat for as many modes needed, since we might want to exclude some PvP modes such as Mayhem
-searchRadius = 3
-countExpansion = 1
-date_start = date(2022, 9, 23)
-date_end = datetime.today().date()
-
-# IB Control, IB Clash, Trials, PvP Competitive, PvP Quickplay
-IB_CONTROL = 43
-IB_CLASH = 44
-TRIALS = 84
-PVP_COMPETITIVE = 69
-PVP_QUICKPLAY = 70
-modes = [PVP_QUICKPLAY]
-
-mad = 4611686018467559123
-OriginBlock = [(mad, 3)]
 weapons = []
 
 FILE_DUMP_NAME = FILE_DUMP_NAME.format(searchRadius, ''.join([str(i)+'-' for i in modes]), date_start, date_end)

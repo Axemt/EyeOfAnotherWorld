@@ -1,3 +1,4 @@
+@@ -1,121 +0,0 @@
 # Byte-compiled / optimized / DLL files
 __pycache__/
 *.py[cod]
@@ -112,10 +113,17 @@ dmypy.json
 
 # Pyre type checker
 .pyre/
+
+# project specific files
 D2_TOKEN
 .atok
 *.npy
 icon.jpg
 *.content
-*.d2data
-*.csv
+#*.d2data
+#*.csv
+performance/
+models/
+
+# mac files
+*._*
