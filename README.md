@@ -24,3 +24,6 @@ by Jorge Jimenez Garcia, as part of a Bsc in Computer Science for Technological 
 ### Datasets available
 
 The repository contains data gathered during 'Season of Plunder', 'Season of the Seraph' and 'Lightfall' respectively. It is present in the ```data``` directory, and available in raw and csv formats. Raw formats are to be processed by the ```Preprocess``` notebook again to account for changes in the game's database definitions.
+
+### Where do I get a Bungie.net token?
+Register an Application at [Bungie's developer portal](https://www.bungie.net/en/Application) to obtain your API key
